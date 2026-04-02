@@ -1,9 +1,8 @@
 #include "Vehicle.h"
+#include "ParkingSpot.h"
+#include "Ticket.h"
 
-Vehicle::Vehicle(int num, VehicleType t) {
-    this->vehicleNumber = num;
-    this->type = t;
-}
+Vehicle::Vehicle(int num, VehicleType t): vehicleNumber(num), type(t), spot(nullptr), ticket(nullptr) {}
 
 int Vehicle::getNumber() {
     return this->vehicleNumber;
@@ -27,4 +26,9 @@ void Vehicle::assignTicket(Ticket &ticket) {
 
 Ticket* Vehicle::getTicket() {
     return this->ticket;
+}
+
+void Vehicle::clearParkingState() {
+    this->spot = nullptr;
+    this->ticket = nullptr;
 }

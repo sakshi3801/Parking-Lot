@@ -9,12 +9,17 @@
 #include "CardPayment.h"
 #include "UPIPayment.h"
 #include "VehicleType.h"
+#include "TicketService.h"
+#include "CheckoutService.h"
+#include "ParkingService.h"
 
 using namespace std;
 
 int main() {
     PaymentStrategy *strategy = new HourlyPaymentStrategy();
     PaymentProcessor *processor = new CardPayment();
+    TicketService *ticketService = new TicketService();
+    CheckoutService *checkoutService = new CheckoutService(*processor, *strategy);
     vector<ParkingSpot*> carSpots;
     vector<ParkingSpot*> bikeSpots;
     string idCar = "car";
@@ -30,15 +35,28 @@ int main() {
         ParkingSpot *spot = new ParkingSpot(newId, SpotType::SMALL);
         bikeSpots.push_back(spot);
     }
-    ParkingLot *parkingLot = new ParkingLot(*strategy, *processor, carSpots, bikeSpots);
+    ParkingLot *parkingLot = new ParkingLot(carSpots, bikeSpots);
+    ParkingService *parkingService = new ParkingService(*parkingLot, *ticketService, *checkoutService);
 
     Vehicle *v1 = new Vehicle(1, VehicleType::CAR);
     Vehicle *v2 = new Vehicle(2, VehicleType::BIKE);
     Vehicle *v3 = new Vehicle(4, VehicleType::CAR);
-    parkingLot->parkVehicle(*v1);
-    parkingLot->parkVehicle(*v2);
+    if (parkingService->parkVehicle(*v1)) {
+        cout << "Vehicle has been parked at " << v1->getSpot()->getSpotId() << endl;
+    } else {
+        cout << "No parking spot available" << endl;
+    }
+    if (parkingService->parkVehicle(*v2)) {
+        cout << "Vehicle has been parked at " << v2->getSpot()->getSpotId() << endl;
+    } else {
+        cout << "No parking spot available" << endl;
+    }
 
-    parkingLot->removeVehicle(*v1);
-    parkingLot->parkVehicle(*v3);
+    parkingService->removeVehicle(*v1);
+    if (parkingService->parkVehicle(*v3)) {
+        cout << "Vehicle has been parked at " << v3->getSpot()->getSpotId() << endl;
+    } else {
+        cout << "No parking spot available" << endl;
+    }
 
 }

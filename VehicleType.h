@@ -1,6 +1,4 @@
-#include<iostream>
-
-using namespace std;
+#pragma once
 
 enum class VehicleType {
     BIKE,

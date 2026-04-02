@@ -3,13 +3,10 @@
 #include "Vehicle.h"
 #include "VehicleType.h"
 
-using namespace std;
-
 ParkingSpot::ParkingSpot(string spotId, SpotType spotType) : spotId(spotId), spotType(spotType), vehicle(nullptr), isEmpty(true) {}
 
 void ParkingSpot::park(Vehicle &v) {
     if (!this->isAvailable() || !isMatch(v)) {
-        cout << "Vehicle cannnot be parked here!!";
         return;
     }
     this->vehicle = &v;

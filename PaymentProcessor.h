@@ -4,6 +4,6 @@
 using namespace std;
 
 class PaymentProcessor {
-    public: virtual void processPayment(int amount);
+    public: virtual void processPayment(int amount) = 0;
             virtual ~PaymentProcessor() = default;
 };

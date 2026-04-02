@@ -1,14 +1,6 @@
-#pragma once
 #include "ParkingLot.h"
-#include <ctime>
-#include <math.h>
 
-using namespace std;
-
-int ParkingLot::ticketCounter = 0;
-
-ParkingLot::ParkingLot(PaymentStrategy &strategy, PaymentProcessor &processor, vector<ParkingSpot*> &carSpots, vector<ParkingSpot*> &bikeSpots):
-strategy(strategy), processor(processor), carSpots(carSpots), bikeSpots(bikeSpots) {}
+ParkingLot::ParkingLot(std::vector<ParkingSpot*> &carSpots, std::vector<ParkingSpot*> &bikeSpots): carSpots(carSpots), bikeSpots(bikeSpots) {}
 
 ParkingSpot* ParkingLot::findParkingSpot(Vehicle &v) {
     if (v.getType() == VehicleType::CAR) {
@@ -25,36 +17,6 @@ ParkingSpot* ParkingLot::findParkingSpot(Vehicle &v) {
     return nullptr;
 }
 
-void ParkingLot::parkVehicle(Vehicle &v) {
-    ParkingSpot* spot = this->findParkingSpot(v);
-    if (spot == nullptr) {
-        cout << "No parking spot available";
-        return;
-    }
-    spot->park(v);
-    v.setSpot(spot);
-    this->generateTicket(v);
-    cout << "Vehicle has been parked at " << spot->getSpotId();
+void ParkingLot::vacateSpot(ParkingSpot &spot) {
+    spot.remove();
 }
-
-void ParkingLot::removeVehicle(Vehicle &v) {
-    ParkingSpot *spot = v.getSpot();
-    Ticket *t = v.getTicket();
-    if (!spot || !t) return;
-    long long duration = t->getDuration((long long)time(nullptr));
-    this->process(duration, v.getType());
-    spot->remove();
-}
-
-void ParkingLot::generateTicket(Vehicle &v) {
-    long long entryTime = (long long)time(nullptr);
-    Ticket *t = new Ticket(++ticketCounter, entryTime, &v, v.getSpot());
-    v.assignTicket(*t);
-}
-
-void ParkingLot::process(long long duration, VehicleType type) {
-    int amount = this->strategy.calculate(duration, type);
-    this->processor.processPayment(amount);
-}
-
-

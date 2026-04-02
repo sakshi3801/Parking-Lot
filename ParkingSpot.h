@@ -1,7 +1,8 @@
 #pragma once
 #include <iostream>
-#include "Vehicle.h"
 #include "SpotType.h"
+
+class Vehicle;
 
 using namespace std;
 

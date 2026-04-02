@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
 #include "VehicleType.h"
-#include "Ticket.h"
-#include "ParkingSpot.h"
+
+class Ticket;
+class ParkingSpot;
 
 class Vehicle {
     private: int vehicleNumber;
@@ -17,4 +18,5 @@ class Vehicle {
             ParkingSpot* getSpot();
             void assignTicket(Ticket &ticket);
             Ticket* getTicket();
+            void clearParkingState();
 };

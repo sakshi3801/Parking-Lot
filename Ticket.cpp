@@ -1,6 +1,6 @@
 #include "Ticket.h"
-
-using namespace std;
+#include "ParkingSpot.h"
+#include "Vehicle.h"
 
 Ticket::Ticket(int ticketId, long long entryTime, Vehicle *v, ParkingSpot *spot): ticketId(ticketId), entryTime(entryTime), v(v), spot(spot) {}
 
