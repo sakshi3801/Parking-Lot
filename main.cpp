@@ -12,11 +12,15 @@
 #include "TicketService.h"
 #include "CheckoutService.h"
 #include "ParkingService.h"
+#include <map>
 
 using namespace std;
 
 int main() {
-    PaymentStrategy *strategy = new HourlyPaymentStrategy();
+    map<VehicleType, int> hourlyRates = {{VehicleType::BIKE, 20}, {VehicleType::CAR, 40}};
+    map<VehicleType, int> fixedRates = {{VehicleType::BIKE, 50}, {VehicleType::CAR, 100}};
+    
+    PaymentStrategy *strategy = new HourlyPaymentStrategy(hourlyRates);
     PaymentProcessor *processor = new CardPayment();
     TicketService *ticketService = new TicketService();
     CheckoutService *checkoutService = new CheckoutService(*processor, *strategy);
@@ -25,17 +29,17 @@ int main() {
     string idCar = "car";
     string idBike = "bike";
 
+    ParkingLot *parkingLot = new ParkingLot();
     for (int i=0; i<5; i++) {
         string newId = idCar + std::to_string(i);
         ParkingSpot *spot = new ParkingSpot(newId, SpotType::LARGE);
-        carSpots.push_back(spot);
+        parkingLot->addSpots(VehicleType::CAR, spot);
     }
     for (int i=0; i<5; i++) {
         string newId = idBike + std::to_string(i);
         ParkingSpot *spot = new ParkingSpot(newId, SpotType::SMALL);
-        bikeSpots.push_back(spot);
+        parkingLot->addSpots(VehicleType::BIKE, spot);
     }
-    ParkingLot *parkingLot = new ParkingLot(carSpots, bikeSpots);
     ParkingService *parkingService = new ParkingService(*parkingLot, *ticketService, *checkoutService);
 
     Vehicle *v1 = new Vehicle(1, VehicleType::CAR);

@@ -1,10 +1,10 @@
 #include "ParkingService.h"
 
-ParkingService::ParkingService(ParkingLot &parkingLot, TicketService &ticketService, CheckoutService &checkoutService):
-parkingLot(parkingLot), ticketService(ticketService), checkoutService(checkoutService) {}
+ParkingService::ParkingService(IParkingLot &iParkingLot, TicketService &ticketService, CheckoutService &checkoutService):
+iParkingLot(iParkingLot), ticketService(ticketService), checkoutService(checkoutService) {}
 
 bool ParkingService::parkVehicle(Vehicle &vehicle) {
-    ParkingSpot *spot = parkingLot.findParkingSpot(vehicle);
+    ParkingSpot *spot = iParkingLot.findParkingSpot(vehicle);
     if (spot == nullptr) {
         return false;
     }
@@ -22,7 +22,7 @@ bool ParkingService::removeVehicle(Vehicle &vehicle) {
     }
 
     checkoutService.process(vehicle);
-    parkingLot.vacateSpot(*spot);
+    iParkingLot.vacateSpot(*spot);
     vehicle.clearParkingState();
     return true;
 }

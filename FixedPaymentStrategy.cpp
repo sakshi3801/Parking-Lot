@@ -2,17 +2,7 @@
 
 using namespace std;
 
+FixedPaymentStrategy::FixedPaymentStrategy(map<VehicleType, int> &fixedRates): fixedRates(fixedRates) {}
 int FixedPaymentStrategy::calculate(long long duration, VehicleType t) {
-    int amount;
-    switch (t)
-    {
-    case VehicleType::BIKE:
-         amount = 50;
-         break;
-    
-    case VehicleType::CAR:
-         amount = 100;
-         break;
-    } 
-    return amount;
+    return fixedRates[t];
 }

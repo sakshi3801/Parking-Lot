@@ -1,13 +1,14 @@
 #pragma once
 #include "ParkingSpot.h"
 #include "Vehicle.h"
+#include "IParkingLot.h"
+#include <map>
 #include <vector>
 
-class ParkingLot {
-    private: std::vector<ParkingSpot*> &carSpots;
-             std::vector<ParkingSpot*> &bikeSpots;
-    
-    public: ParkingLot(std::vector<ParkingSpot*> &carSpots, std::vector<ParkingSpot*> &bikeSpots);
-            ParkingSpot* findParkingSpot(Vehicle &v);
-            void vacateSpot(ParkingSpot &spot);
+class ParkingLot: public IParkingLot {
+    private: map<VehicleType, vector<ParkingSpot*>> spots;
+    public:
+            ParkingSpot* findParkingSpot(Vehicle &v) override;
+            void vacateSpot(ParkingSpot &spot) override;
+            void addSpots(VehicleType t, ParkingSpot *spot) override;
 };

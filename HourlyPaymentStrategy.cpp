@@ -2,18 +2,8 @@
 
 using namespace std;
 
+HourlyPaymentStrategy::HourlyPaymentStrategy(map<VehicleType, int> &hourlyRates): hourlyRates(hourlyRates) {}
 int HourlyPaymentStrategy::calculate(long long duration, VehicleType t) {
-    int hours = duration / 60;
-    int amount;
-    switch (t)
-    {
-    case VehicleType::BIKE:
-         amount = 20 * hours;
-         break;
-    
-    case VehicleType::CAR:
-         amount = 40 * hours;
-         break;
-    } 
-    return amount;
+    int hours = duration / 3600;
+    return hourlyRates[t] * hours;
 }

@@ -1,22 +1,18 @@
 #include "ParkingLot.h"
 
-ParkingLot::ParkingLot(std::vector<ParkingSpot*> &carSpots, std::vector<ParkingSpot*> &bikeSpots): carSpots(carSpots), bikeSpots(bikeSpots) {}
-
 ParkingSpot* ParkingLot::findParkingSpot(Vehicle &v) {
-    if (v.getType() == VehicleType::CAR) {
-        for (int i=0; i<this->carSpots.size(); i++) {
-            ParkingSpot *spot = carSpots[i];
-            if (spot->isAvailable()) return spot;
-        }
-    } else {
-        for (int i=0; i<this->bikeSpots.size(); i++) {
-            ParkingSpot *spot = bikeSpots[i];
-            if (spot->isAvailable()) return spot;
-        }
+    VehicleType type = v.getType();
+    if (spots[type].size() == 0) return nullptr;
+    for (int i=0; i<spots[type].size(); i++) {
+        if (spots[type][i]->isAvailable()) return spots[type][i];
     }
     return nullptr;
 }
 
 void ParkingLot::vacateSpot(ParkingSpot &spot) {
     spot.remove();
+}
+
+void ParkingLot::addSpots(VehicleType t, ParkingSpot *spot) {
+    spots[t].push_back(spot);
 }
